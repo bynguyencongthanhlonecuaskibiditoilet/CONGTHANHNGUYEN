@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Ký IPA Online</h2>
+
+<input type="file" id="ipa"><br>
+<input type="file" id="p12"><br>
+<input type="file" id="mp"><br>
+<input type="password" id="pass" placeholder="Password"><br>
+
+<button onclick="sign()">Ký App</button>
+
+<div id="result"></div>
+
+<script>
+async function sign() {
+  const form = new FormData();
+
+  form.append("ipa", ipa.files[0]);
+  form.append("p12", p12.files[0]);
+  form.append("mobileprovision", mp.files[0]);
+  form.append("password", pass.value);
+
+  const res = await fetch("/sign", {
+    method: "POST",
+    body: form
+  });
+
+  const data = await res.json();
+
+  if (data.link) {
+    result.innerHTML = `<a href="${data.link}">Cài App</a>`;
+  } else {
+    result.innerText = "Lỗi ký app";
+  }
+}
+</script>
+
+</body>
+</html>
